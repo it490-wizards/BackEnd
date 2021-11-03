@@ -17,9 +17,12 @@ else
 }
 
 $request = array();
-$request ['type'] = 'show';
-$request ['some'] = '123';
+$request ['type'] = 'test';
+//$request ['some'] = '123';
 
+//$request_1 = array ();
+//$request_1 ['type']='test';
+ 
 
 $response = $client->send_request($request); // this is what sends the array over 
 //$response = $client->publish($request);

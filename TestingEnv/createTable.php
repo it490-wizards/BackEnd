@@ -35,21 +35,33 @@ function doLogin($username,$password) // to get into rabbit
     // lookup username in databas
     // check password
     return true;
-    //return false if not valida
-}a
+    //return false if not valid
+}
+
+
+// ------------------------------------------------------------//
+
+
+function show ($message){
+	$thingy ='';
+	$thingy = $message;
+	echo $thingy.PHP_EOL;
+	return true;
+}
+
+// ------------------------------------------------------------------//
 
 function testfoo($username, $password){ // testing inserting stuff LOL?
 
 
-$servername = "xxx";
-$dbusername = "xxx";
-$dbpassword = "xxx";
+$servername = "127.0.0.1";
+$dbusername = "test";
+$dbpassword = "SuperSad4u32:(";
 
 try {
 	$db = new PDO ("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword);
 /*	$connect -> setAttribute (PDO::ARRT_ERRMODE, PDO::ERRMODE_EXCEPTION);*/
 	echo "YOU DID IT POGU you are connected to sql!\n";
-	
 	
 	
 	$testInsert = $db->prepare("INSERT INTO `testingcon` (username, password) values (:username,:password)");
@@ -114,20 +126,20 @@ function newUserLogin ($feUn, $fePw, $feEm){
 
 function seefoo ($wht){
 
-$servername = "xxxx";
-$dbusername = "xxx";
-$dbpassword = "xxxx";
+$servername = "127.0.0.1";
+$dbusername = "test";
+$dbpassword = "SuperSad4u32:(";
 $a = $wht;
 
 try{
 	$db = new PDO ("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword);
-	echo "YOU DID IT POGU you are connected to sql!\n";
+	//echo "YOU DID IT POGU you are connected to sql!\n";
 	$testshow = $db->prepare("SELECT * from testingcon");
 	
 	$testshow->execute();
 	
 	$results = $testshow->fetchall (PDO::FETCH_ASSOC); // gets all the data from query
-	echo "<pre>" . var_export ($results, true) . "</pre>".PHP_EOL;
+	echo " ". var_export ($results, true) . " ".PHP_EOL;
 	//global $CS;
 	//$CS = $results;
 	
@@ -149,6 +161,7 @@ function requestProcessor($request) // this is where you would explain what to d
 
   echo "received request".PHP_EOL;
   var_dump($request);
+
   if(!isset($request['type']))
   {
     return "ERROR: unsupported message type";
@@ -175,11 +188,13 @@ function requestProcessor($request) // this is where you would explain what to d
     	case "show":
       		return seefoo($request['some']);
 		
+	case "say":
+		return show ($request['message']);
      
       
       
   }
-  return array("returnCode" => '0', 'message'=>"Server received request and processed",'data' =>"the table was suppose to go here");
+  return array("returnCode" => '1', 'message'=>"Server received request and processed");
 }
 
 
