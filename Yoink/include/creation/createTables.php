@@ -2,9 +2,10 @@
 
 
 /*
+    JNCV
    Using this, you can create the tables. 
    I will be using the create if not exist, so that if the script runs, it will not make tables that are already in the server LOL
-   also if you run it at first, it will creat all the tables that are needed.
+   also if you run it at first, it will create all the tables that are needed.
    
    
 */
@@ -36,12 +37,8 @@ try {
     //remember to execute what you prepare!
     $stmt->execute();
     */
-
-
     
-    
-
-    // creating table for userLogins
+    // creating table for userLogin
     $createUserTable = $db ->prepare ("CREATE TABLE IF NOT EXISTS `userLogin`
         (
         `userID` int auto_increment not null,
@@ -59,9 +56,9 @@ try {
     $createFormTable= $db ->prepare (
         "CREATE TABLE IF NOT EXISTS formTable(
             userID int not null,
-            genre varchar (20),
+            genre varchar (100),
             duration int not null,
-            'year' varchar (20),
+            `year` varchar (20),
             language varchar (200),
             Primary Key (`userID`),
             Foreign Key (`userID`) references userLogin(`userID`)
@@ -80,23 +77,21 @@ try {
 
     );
 
-
-
-    $createUserSes  -> execute(); // this will run the code above if it can
-    // end of userSessions
+    $createUserSes -> execute(); // this will run the code above if it can
+    // end of isnta
     
 
     //create of cachedMovie Table
-    $cm= $db ->prepare ("CREATE TABLE IF NOT EXISTS `movies`(
+    $cm = $db ->prepare ("CREATE TABLE IF NOT EXISTS `movies`(
           movie_id int auto_increment,
           imbd_id varchar (12) not null,
           title varchar (200) not null,
-          description text,
-          image text,
+          `description` text,
+          `image` text,
           genre varchar(200),
           duration int (10),
-          year int (10),
-          language varchar (200),
+          `year` int (10),
+          `language` varchar (200),
           Primary Key (movie_id)
         );
     ");
@@ -109,45 +104,38 @@ try {
             userID int not null,
             Foreign Key (`userID`) references userLogin(`userID`),
             Foreign Key (`movie_id`) references movies(`movie_id`)     
-            );
-  ");
+            );");
 
     $ui -> execute(); // end of userInventory 
 
 
     // creating review table
-    $rb = $db ->prepare ("CREATE TABLE IF NOT EXISTS `reviews`(
+    $rc = $db ->prepare ("CREATE TABLE IF NOT EXISTS `reviews`(
         movie_id int not null,
         userID int not null,
         review_id int auto_increment,
+        reviewRating int not null, 
+        reviewText text,    
         Primary Key (review_id),
         Foreign Key (`userID`) references userLogin(`userID`),
         Foreign Key (`movie_id`) references movies(`movie_id`)     
         );
     ");
 
-    $rb -> execute(); // end of userInventory 
-    
+    $rc -> execute(); // end of userInventory 
 
 
 
     
 
 
-
-
-
-
-
-
- 
 
 
 }  catch (Exception $e){
 
-    echo $e->getMessage();
-    echo "it didnt work LMAO";
-    exit ('SOMETHING BROKE :(');
+        echo $e->getMessage();
+        echo "it didnt work LMAO";
+        exit ('SOMETHING BROKE :(');
 
 }
 

@@ -1,8 +1,9 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once 'config.php';
-require_once 'inserts.php';
+require 'config.php';
+//require ("getters.php");
+//require ("inserts.php");
 
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -31,17 +32,13 @@ function seefoo (){
 
 
 	// put this into a config.php and use a require once :)
-//	$servername = "127.0.0.1";
-//	$dbusername = "test";
-//	$dbpassword = "SuperSad4u32:(";
 
 	try{
 		
 		require 'config.php'; // to get the sensitive stuff :^)
-		echo $dbusername.PHP_EOL;
 
 		$db = new PDO ("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
-		echo "YOU DID IT POGU you are connected to sql!\n";
+		// echo "YOU DID IT POGU you are connected to sql!\n";
 		$testshow = $db->prepare("SELECT * from testingcon");
 		$testshow->execute();
 		
@@ -99,7 +96,8 @@ $callback = function ($req) { // it calls the function here
     $params = $obj->params;
     
     // SWTICH HEREEEEEEEEEEEEEEEEEEEEEEe
-    
+	// ASK ANDREW WTF AM I SUPPOSE TO DO HERE LUL TO MAKE IS NOT SWITCH STATEMENT
+    // ---------------------------->>>>>>>>>>>>>>>>. we have to replace this dude
     switch ($obj->func){
     
     	case "seeFoo":
@@ -116,7 +114,7 @@ $callback = function ($req) { // it calls the function here
     		echo $ans;
     		break;
     
-    }
+    } // replace with a func array here
     
     echo ' [.] fib(', 0, ")\n";
 
