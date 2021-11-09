@@ -36,7 +36,3 @@ function doLogin ($username, $password){
 
 
 }
-
-
-
-?>

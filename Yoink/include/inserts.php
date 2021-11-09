@@ -147,6 +147,8 @@ function setMovie($imbd_id, $title, $desc, $image, $genre, $duration, $year, $la
 	}
 }
 
+//-------------------- SESSION STUFF IS BELOW HERE ----------------------------
+
 // create a werid string for sessions
 function generateRandomString()
 {
