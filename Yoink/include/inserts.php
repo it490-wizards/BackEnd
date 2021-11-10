@@ -48,7 +48,9 @@ function register($username, $password, $email)
 
 		return true;
 	} catch (Exception $e) {
+
 		echo "this is quite unfortunate. You cant add users at the momment. :(" . $e->getMessage();
+		return false;
 	}
 }
 
