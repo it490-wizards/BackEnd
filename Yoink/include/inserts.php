@@ -45,6 +45,8 @@ function register($username, $password, $email)
 		$insert = $db->prepare("INSERT INTO `userLogin` (username, password, email) values (:username, :password, :email)");
 		$v = array(":username" => $username, ":password" => $password, ":email" => $email);
 		$insert->execute($v);
+
+		return true;
 	} catch (Exception $e) {
 		echo "this is quite unfortunate. You cant add users at the momment. :(" . $e->getMessage();
 	}
@@ -167,5 +169,25 @@ function setSession($userID, $session)
 		// echo "session is set >>> " . $userID . " <<< this is the uid in session func";
 	} catch (Exception $e) {
 		echo "this is quite unfortunate. You cant add users at the momment. :(" . $e->getMessage();
+	}
+}
+
+
+function logout($sessionToken)
+{
+	try {
+		require "config.php";
+		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
+
+		$lm = $db->prepare("DELETE FROM `userSession` where `session_id` = :std");
+		$vi = array(":std" => $sessionToken);
+		$lm->execute($vi);
+
+		// get the stuff 
+		// this is how you get the number from the qs
+
+		return true;
+	} catch (Exception $e) {
+		echo "it persist :///// " . ' ' . $e->getMessage();
 	}
 }
