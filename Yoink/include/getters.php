@@ -47,10 +47,17 @@ function getSaved($userID)
 
         require "config.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
+        /*
         $showINV = $db->prepare("SELECT userLogin.userID, userInv.movie_id, title, `description`             
         from userLogin, userInv, movies,reviews             
         where userInv.userID = userLogin.userID 
         AND movies.movie_id = reviews.movie_id 
+        AND userLogin.userID = :usrid;");
+        */
+        $showINV = $db->prepare("SELECT userLogin.userID, userInv.movie_id, title, `description`             
+        from userLogin, userInv, movies             
+        where userInv.userID = userLogin.userID 
+        AND movies.movie_id = userInv.movie_id 
         AND userLogin.userID = :usrid;");
         $v = array(":usrid" => $userID);
         $showINV->execute($v);
@@ -101,7 +108,6 @@ function getRecommended($userID)
 // gr the movieID, title, secription, reviewrating of the movie, and the reviewtext
 function getReviews($userID)
 {
-
     try {
 
         require "config.php";
@@ -116,10 +122,8 @@ function getReviews($userID)
         $testshow->execute($v);
 
         $results = $testshow->fetchall(PDO::FETCH_ASSOC); // gets all the data from query
-        // $readable = json_encode($results);
         $readable = $results;
 
-        // echo $readable.PHP_EOL;	//
         return $readable;
     } catch (PDOException $e) {
         echo "function getReivew failed. " . $e->getMessage();
@@ -177,12 +181,24 @@ function getAllReviews($movie_id)
     }
 }
 
+
+// create a werid string for sessions
+function generateRandomString()
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $String = '';
+    for ($i = 0; $i < 15; ++$i) {
+        $String .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $String;
+}
+
+
 // i need to solve this out with andrew LOL
 // i already generate the session token in the insrts
 function login($username, $password)
 {
-
-
     try {
         require "config.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
@@ -193,11 +209,52 @@ function login($username, $password)
 
         $results = $mm->fetchall(PDO::FETCH_ASSOC); // gets all the data from query
         //$readable = json_encode($results);
-        $readable = $results;
+        // $readable = $results;
 
+        $tyu = generateRandomString();
+        // 
+        //echo "lmao did you login? " . PHP_EOL;
         //return $readable;
-        return "HELLO :)";
+
+        // i need to get the userID from the username
+        $stmt = $db->prepare("SELECT userID from userLogin where username = :un");
+        $gh = array(":un" => $username);
+        $stmt->execute($gh);
+        $rs = $stmt->fetch(PDO::FETCH_ASSOC);
+        $uID = $rs["userID"];
+        $uID2 = intval($uID);
+        //     echo $uID2 . "  ";
+        //   echo gettype($uID2);
+
+
+
+
+        //$my_array = json_decode(json_encode($results, JSON_NUMERIC_CHECK));
+        // echo ">>>> " . $rs . "<<<<<<";
+
+        setSession($uID2, $tyu);
+        //  echo "Login is good";D
+
+        return $tyu;
     } catch (Exception $e) {
         echo "LMAO U CANT LOGIN U FOOL";
+    }
+}
+
+
+function session_to_userid($st)
+{
+    try {
+        require "config.php";
+        $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
+
+        $lm = $db->prepare("SELECT `user_id` from `userSession` where `session_id` = :std");
+        $vi = array(":std" => $st);
+        $r = $lm->execute($vi);
+        echo "sending data to jose";
+        echo $r . PHP_EOL;
+        return $r;
+    } catch (Exception $e) {
+        echo "LMAO SES MORE LIKE SEG";
     }
 }

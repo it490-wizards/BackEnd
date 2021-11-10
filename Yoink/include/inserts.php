@@ -149,30 +149,22 @@ function setMovie($imbd_id, $title, $desc, $image, $genre, $duration, $year, $la
 
 //-------------------- SESSION STUFF IS BELOW HERE ----------------------------
 
-// create a werid string for sessions
-function generateRandomString()
-{
-	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	$charactersLength = strlen($characters);
-	$String = '';
-	for ($i = 0; $i < 15; ++$i) {
-		$String .= $characters[rand(0, $charactersLength - 1)];
-	}
-	return $String;
-}
 
 // to add stuff to session table
-function setSession($userID)
+function setSession($userID, $session)
 {
 	try {
 		require 'config.php'; // to get the sensitive stuff
 		$db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword);
-		$seed = generateRandomString();
+
 		$cTime = time();
+
 		$abc = $db->prepare("INSERT INTO `userSession` (`session_id`,`user_id`,`creation`) 
 		values (:sesid, :usrid, :djtime)");
-		$v = array(":sesid" => $seed, ":usrid" => $userID, ":djtime" => $cTime);
+		$v = array(":sesid" => $session, ":usrid" => $userID, ":djtime" => $cTime);
 		$abc->execute($v);
+
+		// echo "session is set >>> " . $userID . " <<< this is the uid in session func";
 	} catch (Exception $e) {
 		echo "this is quite unfortunate. You cant add users at the momment. :(" . $e->getMessage();
 	}
