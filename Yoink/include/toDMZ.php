@@ -1,87 +1,25 @@
 <?php
 
-require_once __DIR__ . "/../vendor/autoload.php";
+require("../include/inserts.php");
+require("../include/toAPICall.php");
 
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
-
-class DatabaseRpcClient
+function setCache()
 {
-    private $connection;
-    private $channel;
-    private $callback_queue;
-    private $response;
-    private $corr_id;
+    try {
 
-    public function __construct()
-    {
-        $ini = parse_ini_file(__DIR__ . "/../rabbitmq.ini");
+        require("../include/config.php");
+        $db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword);
 
-        if ($ini)
-            [
-                "HOST" => $host,
-                "PORT" => $port,
-                "USER" => $user,
-                "PASSWORD" => $password,
-                "VHOST" => $vhost
-            ] = $ini;
-        else
-            die("Failed to parse rabbitmq.ini");
+        $client = new DatabaseRpcClient();
+        $top10 = $client->call("get_top10");
 
-        $this->connection = new AMQPStreamConnection($host, $port, $user, $password, $vhost);
-        $this->channel = $this->connection->channel();
-        list($this->callback_queue,,) = $this->channel->queue_declare(
-            "",
-            false,
-            false,
-            true,
-            false
-        );
-        $this->channel->basic_consume(
-            $this->callback_queue,
-            "",
-            false,
-            true,
-            false,
-            false,
-            [
-                $this,
-                "onResponse"
-            ]
-        );
-    }
-
-    public function onResponse($rep)
-    {
-        if ($rep->get("correlation_id") == $this->corr_id) {
-            $this->response = $rep->body;
+        foreach ($top10 as $movie) {
+            setMovie($movie->id, $movie->title, $movie->plot, $movie->image, $movie->genres, intval($movie->runtimeMins), $movie->year, $movie->languages);
         }
-    }
-
-    public function call($func, ...$args)
-    {
-        $this->response = null;
-        $this->corr_id = uniqid();
-
-        // i assume what I am chaing is what is in the message.
-        // in this case I will be calling the server that andrew 
-        // ??? i need the details or is 
-
-        $msg = new AMQPMessage(
-            json_encode([
-                "func" => $func,
-                "args" => $args
-            ]),
-            [
-                "correlation_id" => $this->corr_id,
-                "reply_to" => $this->callback_queue
-            ]
-        );
-        $this->channel->basic_publish($msg, "", "rpc_queue");
-        while (is_null($this->response)) {
-            $this->channel->wait();
-        }
-
-        return json_decode($this->response);
+    } catch (Exception $e) {
+        echo "lmao you didnt make into the server from the api fuck u" . PHP_EOL;
     }
 }
+
+
+setCache();

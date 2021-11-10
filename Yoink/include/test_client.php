@@ -91,12 +91,18 @@ $client = new GlobalDatabaseRpcClient();
 
 //print_r($client->call("testfoo", "username1", "password1"));
 // print_r($client->call("register", "crit1", "password10", "email1lol@email.com"));
-//print_r($client->call("setMovie", "11231232jkl", "Pokemon movie", "pika pika", "image.png", "kids show", 130, 2015, "english"));
-// print_r($client->call("addSaved", 4, 1));
-// print_r($client->call("addReview", 6, 18, 5, "wow that movie was great, but could be better"));
-// print_r($client->call("addForm", 12, "slice of life", 310, 2006, "english"));
+// print_r($client->call("setMovie", "0019283sw2", "Sussy Baka but in spanish", "So who is it AmongUs? is it you?", "image.png", "Comedy", 60, 1970, "Spanish"));
+// print_r($client->call("addSaved", 1, 1));
+//print_r($client->call("addReview", 8, 7, 3, "funny but I dont speak spanish"));
+//print_r($client->call("addForm", 19, "Comedy", 60, 1970, "Spanish"));
 // print_r($client->call("setSession", 2));
-//print_r(($client->call("getSaved", 1)));
+// print_r(($client->call("getSaved", 19)));
 //print_r($client->call("seefoo"));
-// print_r($client->call("getReviews", 1));
-print_r($client->call("getAllReviews", 6));
+//print_r($client->call("getReviews", 1));
+//print_r($client->call("getRecommended", 19));
+print_r($client->call("login", "crit1", "password10"));
+// print_r($client->call("session_to_userid", "D8OgyQi50vi3jmn"));
+// print_r($client->call("logout", "D8OgyQi50vi3jmn"));
+
+//print_r($client->call("search_movie", "pokemon"));
+// print_r($client->call("title", "tt8856470"));
