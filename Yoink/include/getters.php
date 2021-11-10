@@ -250,9 +250,14 @@ function session_to_userid($st)
 
         $lm = $db->prepare("SELECT `user_id` from `userSession` where `session_id` = :std");
         $vi = array(":std" => $st);
-        $r = $lm->execute($vi);
-        echo "sending data to jose";
-        echo $r . PHP_EOL;
+        $lm->execute($vi);
+
+        // get the stuff 
+        // this is how you get the number from the qs
+        $rst = $lm->fetch(PDO::FETCH_ASSOC);
+        $xxx = $rst["user_id"];
+        $r = intval($xxx);
+
         return $r;
     } catch (Exception $e) {
         echo "LMAO SES MORE LIKE SEG";
