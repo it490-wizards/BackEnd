@@ -42,15 +42,14 @@ function register($username, $password, $email)
 		require 'config.php'; // to get the sensitive stuff
 		$db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword);
 
+		$salt = random_bytes(16); // jej its  salty
+		$password_hash = hash("sha256", $salt . $password, false); // password cummer
+
 		$insert = $db->prepare("INSERT INTO `userLogin` (username, password, email) values (:username, :password, :email)");
-		$v = array(":username" => $username, ":password" => $password, ":email" => $email);
+		$v = array(":username" => $username, ":password" => $password_hash, ":email" => $email);
 		$insert->execute($v);
-
-		return true;
 	} catch (Exception $e) {
-
 		echo "this is quite unfortunate. You cant add users at the momment. :(" . $e->getMessage();
-		return false;
 	}
 }
 
@@ -181,7 +180,7 @@ function logout($sessionToken)
 		require "config.php";
 		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
 
-		$lm = $db->prepare("DELETE FROM `userSession` where `session_id` = :std");
+		$lm = $db->prepare("DELETE FROM `user_id` where `session_id` = :std");
 		$vi = array(":std" => $sessionToken);
 		$lm->execute($vi);
 

@@ -203,8 +203,12 @@ function login($username, $password)
         require "config.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
 
+        $salt = random_bytes(16);
+        $password_hash = hash("sha256", $salt . $password, false);
+
+
         $mm = $db->prepare("SELECT * from `userLogin` where username = :username, `password` = `:password`");
-        $v = array(":username" => $username, ":password" => $password);
+        $v = array(":username" => $username, ":password" => $password_hash);
         $mm->execute($v);
 
         $results = $mm->fetchall(PDO::FETCH_ASSOC); // gets all the data from query
@@ -237,6 +241,7 @@ function login($username, $password)
 
         return $tyu;
     } catch (Exception $e) {
+        return null;
         echo "LMAO U CANT LOGIN U FOOL";
     }
 }
@@ -253,7 +258,7 @@ function session_to_userid($st)
         $lm->execute($vi);
 
         // get the stuff 
-        // this is how you get the number from the qs
+        // this is how you get the number
         $rst = $lm->fetch(PDO::FETCH_ASSOC);
         $xxx = $rst["user_id"];
         $r = intval($xxx);
