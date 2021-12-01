@@ -127,12 +127,21 @@ try {
     $rc->execute(); // end of userInventory 
 
 
+    // -----------------------------------------------------
 
+    // creation of the table for followers
 
+    $createFollowTable = $db->prepare(
 
+        "CREATE TABLE IF NOT EXISTS followTable(
+            `followerID` int not null,
+	        'followedID' int not null,
+	        Foreign Key (`followerID`) references userLogin(`userID`),
+            Foreign Key (`followedID`) references userLogin(`userID`)
+        )"
+    );
 
-
-
+    $createFollowTable->execute();
 } catch (Exception $e) {
 
     echo $e->getMessage();
