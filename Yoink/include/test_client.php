@@ -90,7 +90,7 @@ $client = new GlobalDatabaseRpcClient();
 // now call your stuff
 
 //print_r($client->call("testfoo", "username1", "password1"));
-// print_r($client->call("register", "crit1", "password10", "email1lol@email.com"));
+print_r($client->call("register", "denise", "denise", "kadfjhasdfhaskdfh@email.com"));
 // print_r($client->call("setMovie", "0019283sw2", "Sussy Baka but in spanish", "So who is it AmongUs? is it you?", "image.png", "Comedy", 60, 1970, "Spanish"));
 // print_r($client->call("addSaved", 1, 1));
 //print_r($client->call("addReview", 8, 7, 3, "funny but I dont speak spanish"));
@@ -100,8 +100,8 @@ $client = new GlobalDatabaseRpcClient();
 //print_r($client->call("seefoo"));
 //print_r($client->call("getReviews", 1));
 //print_r($client->call("getRecommended", 19));
-print_r($client->call("login", "crit1", "password10"));
-// print_r($client->call("session_to_userid", "D8OgyQi50vi3jmn"));
+// print_r($client->call("login", "crit2", "password12"));
+// print_r($client->call("session_to_userid", "jWxLnOxEeUiPCXb"));
 // print_r($client->call("logout", "D8OgyQi50vi3jmn"));
 
 //print_r($client->call("search_movie", "pokemon"));

@@ -13,6 +13,7 @@ function setCache()
         $client = new DatabaseRpcClient();
         $top10 = $client->call("get_top10");
 
+        var_dump($client);
         foreach ($top10 as $movie) {
             setMovie($movie->id, $movie->title, $movie->plot, $movie->image, $movie->genres, intval($movie->runtimeMins), $movie->year, $movie->languages);
         }

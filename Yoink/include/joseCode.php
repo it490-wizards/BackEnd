@@ -75,7 +75,7 @@ function getFollowers($userID)
         $v = array(":xx" => $userID);
         $ts->execute($v);
 
-        $results = $testshow->fetchall(PDO::FETCH_ASSOC); // gets all the data from query
+        $results = $ts->fetchall(PDO::FETCH_ASSOC); // gets all the data from query
         $readable = $results;
 
         return $readable;
@@ -97,10 +97,10 @@ function getUserReviews($userPageID) //different from getAllReviews
             as followers, 
             movies.movie_id, title, description,reviewText,reviewRating
             FROM followTable, userLogin, reviews,movies 
-            WHERE Users.userID = :yyy
+            WHERE userLogin.userID = :yyy
             AND followTable.followedID = userLogin.userID
             AND userLogin.userID=reviews.userID 
-            AND movies.movie_id=Reviews.movie_id
+            AND movies.movie_id=reviews.movie_id
             GROUP BY userLogin.userID, reviews.review_id");
 
 
@@ -129,15 +129,14 @@ function getRankings()
         FROM followTable, userLogin
         WHERE followTable.followedID = userLogin.userID
         GROUP BY userLogin.userID
-        ORDER BY COUNT(followTable.followerID) DESC;");
+        ORDER BY COUNT(followTable.followerID) DESC");
 
 
         $testshow->execute();
 
         $results = $testshow->fetchall(PDO::FETCH_ASSOC); // gets all the data from query
-        $readable = $results;
 
-        return $readable;
+        return $results;
     } catch (PDOException $e) {
         echo "function getRankings failed." . $e->getMessage();
     }    // end of try/catch

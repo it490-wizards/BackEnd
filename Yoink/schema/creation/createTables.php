@@ -132,13 +132,14 @@ try {
     // creation of the table for followers
 
     $createFollowTable = $db->prepare(
-
-        "CREATE TABLE IF NOT EXISTS followTable(
-            `followerID` int not null,
-	        'followedID' int not null,
+        "CREATE TABLE IF NOT EXISTS `followTable`(
+            `fID` int auto_increment,
+            `followerID` int,
+	        `followedID` int,
+            Primary Key (`fID`),
 	        Foreign Key (`followerID`) references userLogin(`userID`),
             Foreign Key (`followedID`) references userLogin(`userID`)
-        )"
+            )"
     );
 
     $createFollowTable->execute();
