@@ -9,7 +9,7 @@ require_once __DIR__ . "/include/joseCode.php";
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-$ini = parse_ini_file(__DIR__ . "/rabbitmq.ini");
+$ini = parse_ini_file(__DIR__ . "/config.ini");
 
 if ($ini)
     [
@@ -20,7 +20,7 @@ if ($ini)
         "vhost" => $vhost
     ] = $ini;
 else
-    die("Failed to parse rabbitmq.ini");
+    die("Failed to parse config.ini");
 
 $connection = new AMQPStreamConnection($host, $port, $user, $password, $vhost);
 $channel = $connection->channel();
