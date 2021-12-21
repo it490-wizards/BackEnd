@@ -6,9 +6,16 @@ Install the PHP dependencies using [Composer](https://getcomposer.org/).
 composer install
 ```
 
-Create a file `config.ini` with your MySQL and RabbitMQ credentials.
+Create a file `config.ini` with your MySQL and RabbitMQ credentials. You should have separate virtual hosts for communication to the frontend and to the DMZ.
 
 ```ini
+[api-proxy]
+host = "localhost"
+port = 5672
+user = "username"
+password = "password"
+vhost = "api-proxy"
+
 [mysql]
 hostname = "localhost"
 username = "username"
@@ -20,7 +27,7 @@ host = "localhost"
 port = 5672
 user = "username"
 password = "password"
-vhost = "database"
+vhost = "frontend"
 ```
 
 Run `create_tables.php` and finally run `database_server.php`.
