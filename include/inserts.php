@@ -16,20 +16,18 @@ function register($username, $password, $email)
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
         $salt = random_bytes(16);
-        $password_hash = hash("sha256", $salt . $password, false);
+        $password_hash = hash("sha256", $salt . $password, true);
 
         $insert = $db->prepare(
             "INSERT INTO `userLogin` (username, password_hash, salt, email)
             VALUES (:username, :password_hash, :salt, :email)"
         );
-        $insert->execute([
+        return $insert->execute([
             ":username" => $username,
             ":password_hash" => $password_hash,
             ":salt" => $salt,
             ":email" => $email
         ]);
-
-        return true;
     } catch (Exception $e) {
         $e->getMessage();
         return false;

@@ -176,7 +176,7 @@ function login($username, $password)
 
         if (
             $result === false ||
-            $result["password_hash"] !== hash("sha256", $result["salt"] . $password, false)
+            $result["password_hash"] !== hash("sha256", $result["salt"] . $password, true)
         ) {
             return null;
         } else {
