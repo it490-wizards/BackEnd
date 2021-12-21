@@ -2,24 +2,22 @@
 <?php
 
 require_once __DIR__ . "/vendor/autoload.php";
-require('./getters.php');
-require('./inserts.php');
-require('./joseCode.php');
-
-
+require_once __DIR__ . "/include/getters.php";
+require_once __DIR__ . "/include/inserts.php";
+require_once __DIR__ . "/include/joseCode.php";
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-$ini = parse_ini_file("rabbitmq.ini");
+$ini = parse_ini_file(__DIR__ . "/rabbitmq.ini");
 
 if ($ini)
     [
-        "HOST" => $host,
-        "PORT" => $port,
-        "USER" => $user,
-        "PASSWORD" => $password,
-        "VHOST" => $vhost
+        "host" => $host,
+        "port" => $port,
+        "user" => $user,
+        "password" => $password,
+        "vhost" => $vhost
     ] = $ini;
 else
     die("Failed to parse rabbitmq.ini");
@@ -29,13 +27,9 @@ $channel = $connection->channel();
 
 $channel->queue_declare("rpc_queue", false, false, false, false);
 
-echo " [x] Awaiting RPC requests", PHP_EOL;
+echo "Awaiting RPC requests", PHP_EOL;
 $callback = function ($req) {
     echo $req->body, PHP_EOL;
-
-    // $req_obj = json_decode($req->body);
-    // $ret = call_user_func_array($req_obj->func, $req_obj->args);
-    //adding some error handling
 
     try {
         $req_obj = json_decode($req->body);
