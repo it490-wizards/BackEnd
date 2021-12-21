@@ -155,55 +155,38 @@ function generateRandomString()
     return $String;
 }
 
-
-// i need to solve this out with andrew LOL
-// i already generate the session token in the insrts
+/**
+ * Process attempted login.
+ *
+ * @param string $username
+ * @param string $password
+ * @return string|null a session token on successful login, `null` otherwise
+ */
 function login($username, $password)
 {
     try {
         require __DIR__ . "/mysql.php";
-        $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
+        $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
-        $salt = random_bytes(16);
-        $password_hash = hash("sha256", $salt . $password, false);
+        $mm = $db->prepare(
+            "SELECT * FROM `userLogin` WHERE username = :username"
+        );
+        $mm->execute([":username" => $username]);
+        $result = $mm->fetch(PDO::FETCH_ASSOC);
 
+        if (
+            $result === false ||
+            $result["password_hash"] !== hash("sha256", $result["salt"] . $password, false)
+        ) {
+            return null;
+        } else {
+            $tyu = generateRandomString();
+            setSession(intval($result["userID"]), $tyu);
 
-        $mm = $db->prepare("SELECT * from `userLogin` where username = :username, `password` = `:password`");
-        $v = array(":username" => $username, ":password" => $password_hash);
-        $mm->execute($v);
-
-        $results = $mm->fetchall(PDO::FETCH_ASSOC); // gets all the data from query
-        //$readable = json_encode($results);
-        // $readable = $results;
-
-        $tyu = generateRandomString();
-        //
-        //echo "lmao did you login? " . PHP_EOL;
-        //return $readable;
-
-        // i need to get the userID from the username
-        $stmt = $db->prepare("SELECT userID from userLogin where username = :un");
-        $gh = array(":un" => $username);
-        $stmt->execute($gh);
-        $rs = $stmt->fetch(PDO::FETCH_ASSOC);
-        $uID = $rs["userID"];
-        $uID2 = intval($uID);
-        //     echo $uID2 . "  ";
-        //   echo gettype($uID2);
-
-
-
-
-        //$my_array = json_decode(json_encode($results, JSON_NUMERIC_CHECK));
-        // echo ">>>> " . $rs . "<<<<<<";
-
-        setSession($uID2, $tyu);
-        //  echo "Login is good";D
-
-        return $tyu;
+            return $tyu;
+        }
     } catch (Exception $e) {
         return null;
-        echo "LMAO U CANT LOGIN U FOOL";
     }
 }
 
