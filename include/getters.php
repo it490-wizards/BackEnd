@@ -1,63 +1,24 @@
 <?php
 
-
-
-/*
-    JNCV: NOV 08
-    --> tested and is working : 
-        - getSaved
-        - getRecommended
-        - getReviews
-        - getMovie
-        - getAllReviews
-
-*/
-/*
-
-
----------------------------------------------
-function seefoo()
-{
-
-    try {
-
-        require 'config.php'; // to get the sensitive stuff :^)
-        $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
-        // echo "YOU DID IT POGU you are connected to sql!\n" ; // DEBUG
-        $testshow = $db->prepare("SELECT * from testingcon");
-        $testshow->execute();
-        $results = $testshow->fetchall(PDO::FETCH_ASSOC); // gets all the data from query       
-        $readable = json_encode($results);
-        echo $readable . PHP_EOL;
-        return $readable;
-    } catch (PDOException $e) {
-        echo "Gosh you couldn't connect :( " . $e->getMessage();
-    }
-}
-*/
-
-// this will get the movies that the user saved aka userInv
-// because this table stores all of the users, you will have to get the userID to filter out their sepcific saves
-
 function getSaved($userID)
 {
-    // put this into a config.php and use a require once :)
+    // put this into a mysql.php and use a require once :)
 
     try {
 
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
         /*
-        $showINV = $db->prepare("SELECT userLogin.userID, userInv.movie_id, title, `description`             
-        from userLogin, userInv, movies,reviews             
-        where userInv.userID = userLogin.userID 
-        AND movies.movie_id = reviews.movie_id 
+        $showINV = $db->prepare("SELECT userLogin.userID, userInv.movie_id, title, `description`
+        from userLogin, userInv, movies,reviews
+        where userInv.userID = userLogin.userID
+        AND movies.movie_id = reviews.movie_id
         AND userLogin.userID = :usrid;");
         */
-        $showINV = $db->prepare("SELECT userLogin.userID, userInv.movie_id, title, `description`             
-        from userLogin, userInv, movies             
-        where userInv.userID = userLogin.userID 
-        AND movies.movie_id = userInv.movie_id 
+        $showINV = $db->prepare("SELECT userLogin.userID, userInv.movie_id, title, `description`
+        from userLogin, userInv, movies
+        where userInv.userID = userLogin.userID
+        AND movies.movie_id = userInv.movie_id
         AND userLogin.userID = :usrid;");
         $v = array(":usrid" => $userID);
         $showINV->execute($v);
@@ -79,15 +40,15 @@ function getRecommended($userID)
 {
     try {
 
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
-        $eRec = $db->prepare("SELECT userLogin.userID, movies.movie_id, title, description 
+        $eRec = $db->prepare("SELECT userLogin.userID, movies.movie_id, title, description
         from movies, userLogin, formTable
-         where userLogin.userID = :usrid 
-         AND formTable.userID = userLogin.userID 
+         where userLogin.userID = :usrid
+         AND formTable.userID = userLogin.userID
          AND ((formTable.genre = movies.genre AND formTable.duration = movies.duration)
-         OR(formTable.genre = movies.genre AND formTable.year = movies.year) 
+         OR(formTable.genre = movies.genre AND formTable.year = movies.year)
          OR (formTable.duration = movies.duration AND formTable.year = movies.year))");
         $v = array(":usrid" => $userID);
         $eRec->execute($v); // lol get honry bonked
@@ -110,11 +71,11 @@ function getReviews($userID)
 {
     try {
 
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
-        $testshow = $db->prepare("SELECT userLogin.userID, movies.movie_id, title, description, reviewRating, reviewText 
-        from movies, userLogin, reviews 
+        $testshow = $db->prepare("SELECT userLogin.userID, movies.movie_id, title, description, reviewRating, reviewText
+        from movies, userLogin, reviews
         where userLogin.userID = :xxx AND userLogin.userID = reviews.userID
         AND movies.movie_id = reviews.movie_id;");
 
@@ -135,7 +96,7 @@ function getReviews($userID)
 function getMovie($movie_id)
 {
     try {
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
         $go = $db->prepare("SELECT title, `description` from `movies` where movie_id = :movie_id ");
@@ -160,12 +121,12 @@ function getAllReviews($movie_id)
 {
 
     try {
-        require "config.php";
+        require __DIR__ . "/mysql.php";
 
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
 
-        $mmm = $db->prepare("SELECT userLogin.username, userLogin.userID, reviews.reviewRating, reviews.reviewText 
-        from reviews, userLogin 
+        $mmm = $db->prepare("SELECT userLogin.username, userLogin.userID, reviews.reviewRating, reviews.reviewText
+        from reviews, userLogin
         where movie_id = :mid
         AND userLogin.userID = reviews.userID");
         $v = array(":mid" => $movie_id);
@@ -200,7 +161,7 @@ function generateRandomString()
 function login($username, $password)
 {
     try {
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
 
         $salt = random_bytes(16);
@@ -216,7 +177,7 @@ function login($username, $password)
         // $readable = $results;
 
         $tyu = generateRandomString();
-        // 
+        //
         //echo "lmao did you login? " . PHP_EOL;
         //return $readable;
 
@@ -250,14 +211,14 @@ function login($username, $password)
 function session_to_userid($st)
 {
     try {
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
 
         $lm = $db->prepare("SELECT `user_id` from `userSession` where `session_id` = :std");
         $vi = array(":std" => $st);
         $lm->execute($vi);
 
-        // get the stuff 
+        // get the stuff
         // this is how you get the number
         $rst = $lm->fetch(PDO::FETCH_ASSOC);
         $xxx = $rst["user_id"];

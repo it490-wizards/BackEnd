@@ -1,14 +1,14 @@
 <?php
 
-// to add followers to the followTable 
-// note the this is dependent on the userLogin table being filled out and being dependent 
+// to add followers to the followTable
+// note the this is dependent on the userLogin table being filled out and being dependent
 function addFollow($followerID, $followedID)
 {
 
     try {
-        require 'config.php';
-        $db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword); // get into db
-        $rInsert = $db->prepare("INSERT INTO followTable (`followerID`, `followedID`) 
+        require __DIR__ . "/mysql.php";
+        $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // get into db
+        $rInsert = $db->prepare("INSERT INTO followTable (`followerID`, `followedID`)
 		values (:followerID, :followedID)");
 
         $v = array(":followerID" => $followerID, ":followedID" => $followedID);
@@ -25,18 +25,18 @@ function getFollowing($userID)
 {
     try {
 
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
         $testshow = $db->prepare(" SELECT userLogin.username, userLogin.userID
             FROM userLogin
-            WHERE userLogin.userID 
+            WHERE userLogin.userID
             IN (
             SELECT followTable.followedID
             FROM followTable, userLogin
             WHERE userLogin.userID = :xxx
-            AND userLogin.userID = followTable.followerID 
-            GROUP BY followTable.followedID) 
+            AND userLogin.userID = followTable.followerID
+            GROUP BY followTable.followedID)
                 GROUP BY userLogin.userID");
 
         $v = array(":xxx" => $userID);
@@ -57,18 +57,18 @@ function getFollowers($userID)
 {
     try {
 
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
         $ts = $db->prepare("SELECT userLogin.username, userLogin.userID
             FROM userLogin
-            WHERE userLogin.userID 
+            WHERE userLogin.userID
             IN (
                 SELECT followTable.followerID
                 FROM followTable, userLogin
                 WHERE userLogin.userID = :xx
                 AND userLogin.userID = followTable.followedID
-                GROUP BY followTable.followerID ) 
+                GROUP BY followTable.followerID )
             GROUP BY userLogin.userID");
 
 
@@ -90,16 +90,16 @@ function getUserReviews($userPageID) //different from getAllReviews
 {
     try {
 
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
-        $testshow = $db->prepare("SELECT userLogin.username,COUNT(followTable.followerID) 
-            as followers, 
+        $testshow = $db->prepare("SELECT userLogin.username,COUNT(followTable.followerID)
+            as followers,
             movies.movie_id, title, description,reviewText,reviewRating
-            FROM followTable, userLogin, reviews,movies 
+            FROM followTable, userLogin, reviews,movies
             WHERE userLogin.userID = :yyy
             AND followTable.followedID = userLogin.userID
-            AND userLogin.userID=reviews.userID 
+            AND userLogin.userID=reviews.userID
             AND movies.movie_id=reviews.movie_id
             GROUP BY userLogin.userID, reviews.review_id");
 
@@ -121,11 +121,11 @@ function getRankings()
 {
     try {
 
-        require "config.php";
+        require __DIR__ . "/mysql.php";
         $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
         $testshow = $db->prepare("SELECT userLogin.username, COUNT(followTable.followerID)
-        as followers 
+        as followers
         FROM followTable, userLogin
         WHERE followTable.followedID = userLogin.userID
         GROUP BY userLogin.userID

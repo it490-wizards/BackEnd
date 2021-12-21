@@ -1,46 +1,12 @@
 <?php
 
-/*
-    JNCV:
-        put all the functions that insert into the tables in here
-	// NOV 11/08 -> What I know is tested and works now:
-		- register 
-		- setMovie
-		- addSaved
-		- addReview
-		- addFrom
-		- setSession
-
-	-> what doesnt work?
-
-*/
-
-/*
-function testfoo($username, $password){ // testing inserting stuff LOL?
-	try {
-
-		require 'config.php'; // to get the sensitive stuff
-		$db = new PDO ("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword);
-		
-		
-		$testInsert = $db->prepare("INSERT INTO `testingcon` (username, password) values (:username,:password)");
-		$varis = array (":username"=>$username, ":password"=>$password);
-		$testInsert->execute($varis);
-	}catch(Exception $e){
-		echo "Gosh you couldn't connect :( " .$e->getMessage ();
-        // probably make sure to catch stuff
-		}	
-	
-} // testfoo end
-*/
-
 // insert a new user into the uesrLogin table
 function register($username, $password, $email)
 {
 	try {
 
-		require 'config.php'; // to get the sensitive stuff
-		$db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword);
+		require __DIR__ . "/mysql.php";
+		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
 		$salt = random_bytes(16); // jej its  salty
 		$password_hash = hash("sha256", $salt . $password, false); // password cummer
@@ -59,10 +25,10 @@ function addReview($movieID, $userID, $ratingReview, $reviewText)
 {
 
 	try {
-		require 'config.php'; // to get the sensitive stuff
-		$db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword); // get into db
+		require __DIR__ . "/mysql.php";
+		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // get into db
 		$rInsert = $db->prepare("
-		INSERT INTO reviews (`movie_id`, `userID`, `reviewRating`, `reviewText`) 
+		INSERT INTO reviews (`movie_id`, `userID`, `reviewRating`, `reviewText`)
 		values (:movieID, :userID, :rr, :rt)");
 		$v = array(":movieID" => $movieID, ":userID" => $userID, ":rr" => $ratingReview, ":rt" => $reviewText);
 		$rInsert->execute($v);
@@ -80,10 +46,10 @@ function addSaved($userID, $movieID)
 
 	try {
 
-		require 'config.php'; // to get the sensitive stuff
-		$db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword); // get into db
+		require __DIR__ . "/mysql.php";
+		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // get into db
 
-		$rInsert = $db->prepare("INSERT INTO `userInv` (`movie_id`, `userID`) 
+		$rInsert = $db->prepare("INSERT INTO `userInv` (`movie_id`, `userID`)
 		values (:md,:ud)");
 		$varis = array(":md" => $movieID, ":ud" => $userID);
 		$rInsert->execute($varis);
@@ -101,8 +67,8 @@ function addMovie($userID, $movieID)
 {
 
 	try {
-		require 'config.php'; // to get the sensitive stuff
-		$db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword); // get into db
+		require __DIR__ . "/mysql.php";
+		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // get into db
 
 		$rInsert = $db->prepare("INSERT INTO `userInv` (userID, movie_id) values (:userID, :movieID)");
 		$varis = array(":userID" => $userID, ":movie_id" => $movieID);
@@ -118,10 +84,10 @@ function addMovie($userID, $movieID)
 function addForm($userID, $genre, $duration, $year, $language)
 {
 	try {
-		require 'config.php'; // to get the sensitive stuff
-		$db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword); // get into db
+		require __DIR__ . "/mysql.php";
+		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // get into db
 
-		$fInsert = $db->prepare("INSERT INTO `formTable` (`userID`, `genre`, `duration`, `year`, `language`) 
+		$fInsert = $db->prepare("INSERT INTO `formTable` (`userID`, `genre`, `duration`, `year`, `language`)
 		values (:userID, :genre, :duration, :era,:langu)");
 		$varis = array(":userID" => $userID, ":genre" => $genre, ":duration" => $duration, ":era" => $year, ":langu" => $language);
 		$fInsert->execute($varis);
@@ -137,8 +103,8 @@ function addForm($userID, $genre, $duration, $year, $language)
 function setMovie($imbd_id, $title, $desc, $image, $genre, $duration, $year, $language)
 {
 	try {
-		require 'config.php'; // to get the sensitive stuff
-		$db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword); // get into db
+		require __DIR__ . "/mysql.php";
+		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // get into db
 
 		$fInsert = $db->prepare("INSERT INTO `movies` (`imdb_id`, `title`, `description`, `image`, `genre`, `duration`, `year`, `language`)
 		values (:imdb_db, :title, :descp, :img, :genre, :duration, :era, :langu);");
@@ -157,12 +123,12 @@ function setMovie($imbd_id, $title, $desc, $image, $genre, $duration, $year, $la
 function setSession($userID, $session)
 {
 	try {
-		require 'config.php'; // to get the sensitive stuff
-		$db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword);
+		require __DIR__ . "/mysql.php";
+		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
 		$cTime = time();
 
-		$abc = $db->prepare("INSERT INTO `userSession` (`session_id`,`user_id`,`creation`) 
+		$abc = $db->prepare("INSERT INTO `userSession` (`session_id`,`user_id`,`creation`)
 		values (:sesid, :usrid, :djtime)");
 		$v = array(":sesid" => $session, ":usrid" => $userID, ":djtime" => $cTime);
 		$abc->execute($v);
@@ -177,14 +143,14 @@ function setSession($userID, $session)
 function logout($sessionToken)
 {
 	try {
-		require "config.php";
+		require __DIR__ . "/mysql.php";
 		$db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword); // connect to db
 
 		$lm = $db->prepare("DELETE FROM `user_id` where `session_id` = :std");
 		$vi = array(":std" => $sessionToken);
 		$lm->execute($vi);
 
-		// get the stuff 
+		// get the stuff
 		// this is how you get the number from the qs
 
 		return true;
