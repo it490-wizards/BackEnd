@@ -1,8 +1,7 @@
 <?php
 
-require_once __DIR__ . "/vendor/autoload.php";
+require_once __DIR__ . "/../vendor/autoload.php";
 
-use DatabaseRpcClient as GlobalDatabaseRpcClient;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -16,18 +15,18 @@ class DatabaseRpcClient
 
     public function __construct()
     {
-        $ini = parse_ini_file("apiCreds.ini");
+        $ini = parse_ini_file(__DIR__ . "/../config.ini", true);
 
         if ($ini)
             [
-                "HOST" => $host,
-                "PORT" => $port,
-                "USER" => $user,
-                "PASSWORD" => $password,
-                "VHOST" => $vhost
-            ] = $ini;
+                "host" => $host,
+                "port" => $port,
+                "user" => $user,
+                "password" => $password,
+                "vhost" => $vhost
+            ] = $ini["api-proxy"];
         else
-            die("Failed to parse rabbitmq.ini");
+            die("Failed to parse config.ini");
 
         $this->connection = new AMQPStreamConnection($host, $port, $user, $password, $vhost);
         $this->channel = $this->connection->channel();
