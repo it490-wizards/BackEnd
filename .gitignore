@@ -1,4 +1,2 @@
-creds.php 
-config.php
-rabbitmq.ini
-apiCreds.ini
+*.ini
+/vendor/

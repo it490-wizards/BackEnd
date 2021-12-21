@@ -66,6 +66,11 @@
                 "hex2bin",
                 "rfc4648"
             ],
+            "support": {
+                "email": "info@paragonie.com",
+                "issues": "https://github.com/paragonie/constant_time_encoding/issues",
+                "source": "https://github.com/paragonie/constant_time_encoding"
+            },
             "time": "2020-12-06T15:14:20+00:00"
         },
         {
@@ -111,20 +116,25 @@
                 "pseudorandom",
                 "random"
             ],
+            "support": {
+                "email": "info@paragonie.com",
+                "issues": "https://github.com/paragonie/random_compat/issues",
+                "source": "https://github.com/paragonie/random_compat"
+            },
             "time": "2020-10-15T08:29:30+00:00"
         },
         {
             "name": "php-amqplib/php-amqplib",
-            "version": "v3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-amqplib/php-amqplib.git",
-                "reference": "c8812f783fe8714a8a8e387003fb297aded7f974"
+                "reference": "1d8e724c1de8ac5a4322f26ba735695880514874"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/c8812f783fe8714a8a8e387003fb297aded7f974",
-                "reference": "c8812f783fe8714a8a8e387003fb297aded7f974",
+                "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/1d8e724c1de8ac5a4322f26ba735695880514874",
+                "reference": "1d8e724c1de8ac5a4322f26ba735695880514874",
                 "shasum": ""
             },
             "require": {
@@ -188,20 +198,24 @@
                 "queue",
                 "rabbitmq"
             ],
-            "time": "2021-10-22T16:37:06+00:00"
+            "support": {
+                "issues": "https://github.com/php-amqplib/php-amqplib/issues",
+                "source": "https://github.com/php-amqplib/php-amqplib/tree/v3.1.1"
+            },
+            "time": "2021-12-03T14:55:21+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.11",
+            "version": "3.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "6e794226a35159eb06f355efe59a0075a16551dd"
+                "reference": "89bfb45bd8b1abc3b37e910d57f5dbd3174f40fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/6e794226a35159eb06f355efe59a0075a16551dd",
-                "reference": "6e794226a35159eb06f355efe59a0075a16551dd",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/89bfb45bd8b1abc3b37e910d57f5dbd3174f40fb",
+                "reference": "89bfb45bd8b1abc3b37e910d57f5dbd3174f40fb",
                 "shasum": ""
             },
             "require": {
@@ -281,6 +295,10 @@
                 "x.509",
                 "x509"
             ],
+            "support": {
+                "issues": "https://github.com/phpseclib/phpseclib/issues",
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.12"
+            },
             "funding": [
                 {
                     "url": "https://github.com/terrafrost",
@@ -295,7 +313,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-27T03:01:46+00:00"
+            "time": "2021-11-28T23:46:03+00:00"
         }
     ],
     "packages-dev": [],
@@ -306,5 +324,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
