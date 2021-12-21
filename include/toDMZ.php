@@ -1,14 +1,14 @@
 <?php
 
-require("../include/inserts.php");
-require("../include/toAPICall.php");
+require_once __DIR__ . "/inserts.php";
+require_once __DIR__ . "/toAPICall.php";
 
 function setCache()
 {
     try {
 
-        require("../include/config.php");
-        $db = new PDO("mysql:host=$servername;dbname=FourTestingP", $dbusername, $dbpassword);
+        require __DIR__ . "/mysql.php";
+        $db = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
 
         $client = new DatabaseRpcClient();
         $top10 = $client->call("get_top10");
