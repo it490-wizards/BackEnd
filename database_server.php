@@ -9,7 +9,7 @@ require_once __DIR__ . "/include/joseCode.php";
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-$ini = parse_ini_file(__DIR__ . "/config.ini");
+$ini = parse_ini_file(__DIR__ . "/config.ini", true);
 
 if ($ini)
     [
@@ -18,7 +18,7 @@ if ($ini)
         "user" => $user,
         "password" => $password,
         "vhost" => $vhost
-    ] = $ini;
+    ] = $ini["rabbitmq"];
 else
     die("Failed to parse config.ini");
 
