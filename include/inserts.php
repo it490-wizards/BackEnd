@@ -1,6 +1,13 @@
 <?php
 
-// insert a new user into the uesrLogin table
+/**
+ * Register a new user.
+ *
+ * @param string $username
+ * @param string $password
+ * @param string $email
+ * @return bool `true` on successful registration, `false` otherwise
+ */
 function register($username, $password, $email)
 {
     try {
@@ -15,11 +22,17 @@ function register($username, $password, $email)
             "INSERT INTO `userLogin` (username, password_hash, salt, email)
             VALUES (:username, :password_hash, :salt, :email)"
         );
-        $insert->execute(
-            [":username" => $username, ":password_hash" => $password_hash, ":email" => $email]
-        );
+        $insert->execute([
+            ":username" => $username,
+            ":password_hash" => $password_hash,
+            ":salt" => $salt,
+            ":email" => $email
+        ]);
+
+        return true;
     } catch (Exception $e) {
         $e->getMessage();
+        return false;
     }
 }
 
